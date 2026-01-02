@@ -6,6 +6,7 @@ extends VehicleBody3D
 
 @export var max_steering: float = 0.7
 @export var engine_power:float = 300
+
 func _ready() -> void:
 	pass
 
@@ -15,6 +16,7 @@ func _process(delta: float) -> void:
 		wheel.suspension_stiffness = suspension_stiff_value
 
 func _physics_process(delta: float) -> void:
-	steering = move_toward(steering,Input.get_axis("ui_right","ui_left") * max_steering,delta * 10.0)
-	engine_force = Input.get_axis("ui_down","ui_up") * engine_power
+	steering = move_toward(steering,Input.get_axis("right","left") * max_steering,delta * 10.0)
+	engine_force = Input.get_axis("reverse","accelerate") * engine_power
+	brake = Input.is_action_pressed("brake")
 	pass
