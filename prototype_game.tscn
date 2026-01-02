@@ -1,6 +1,7 @@
-[gd_scene load_steps=10 format=3 uid="uid://b82ftk5ylh8dl"]
+[gd_scene load_steps=13 format=3 uid="uid://b82ftk5ylh8dl"]
 
 [ext_resource type="Script" uid="uid://cwny6ciekh66o" path="res://car.gd" id="1_rhw53"]
+[ext_resource type="Script" uid="uid://drtwpe3adbg8s" path="res://cam_holder.gd" id="2_4g64t"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_rhw53"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -31,6 +32,12 @@ size = Vector3(1, 0.3, 0.6)
 [sub_resource type="PlaneMesh" id="PlaneMesh_fpxwr"]
 size = Vector2(30, 30)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_rhw53"]
+size = Vector3(0.88513184, 3.59906, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_kbpft"]
+size = Vector3(0.8, 3.599, 1)
+
 [node name="PrototypeGame" type="Node3D"]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
@@ -42,11 +49,13 @@ shadow_enabled = true
 
 [node name="Car" type="VehicleBody3D" parent="." node_paths=PackedStringArray("wheels")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.32453644, 0)
-mass = 1000.0
+mass = 97.789
 script = ExtResource("1_rhw53")
 wheels = [NodePath("Wheel"), NodePath("Wheel2"), NodePath("Wheel3"), NodePath("Wheel4")]
-wheel_friction_slip = 10.0
-suspension_stiff_value = 30.0
+wheel_friction_slip = 0.5
+suspension_stiff_value = 50.0
+max_steering = 0.5
+engine_power = 500.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Car"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15, 0)
@@ -54,7 +63,6 @@ shape = SubResource("BoxShape3D_75k70")
 
 [node name="Wheel" type="VehicleWheel3D" parent="Car"]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -0.362, 0.093, -0.36)
-use_as_traction = true
 wheel_radius = 0.2
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Car/Wheel"]
@@ -63,7 +71,6 @@ mesh = SubResource("CylinderMesh_rhw53")
 
 [node name="Wheel2" type="VehicleWheel3D" parent="Car"]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -0.362, 0.093, 0.36)
-use_as_traction = true
 wheel_radius = 0.2
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Car/Wheel2"]
@@ -72,6 +79,7 @@ mesh = SubResource("CylinderMesh_rhw53")
 
 [node name="Wheel3" type="VehicleWheel3D" parent="Car"]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0.414, 0.093, 0.36)
+use_as_traction = true
 use_as_steering = true
 wheel_radius = 0.2
 
@@ -81,6 +89,7 @@ mesh = SubResource("CylinderMesh_rhw53")
 
 [node name="Wheel4" type="VehicleWheel3D" parent="Car"]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0.414, 0.093, -0.36)
+use_as_traction = true
 use_as_steering = true
 wheel_radius = 0.2
 
@@ -92,9 +101,6 @@ mesh = SubResource("CylinderMesh_rhw53")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15, 0)
 mesh = SubResource("BoxMesh_4g64t")
 
-[node name="Camera3D" type="Camera3D" parent="Car"]
-transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -2, 1, 0)
-
 [node name="Ground" type="StaticBody3D" parent="."]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Ground"]
@@ -102,3 +108,32 @@ shape = SubResource("WorldBoundaryShape3D_kbpft")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Ground"]
 mesh = SubResource("PlaneMesh_fpxwr")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.415148, -0.1055938, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(0.18209827, 0.98328036, 0, -0.98328036, 0.18209827, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("BoxShape3D_rhw53")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
+transform = Transform3D(0.18223552, 0.9832549, 0, -0.9832549, 0.18223552, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("BoxMesh_kbpft")
+
+[node name="StaticBody3D2" type="StaticBody3D" parent="."]
+transform = Transform3D(0.99685276, 0.07927685, 0, -0.07927685, 0.99685276, 0, 0, 0, 1, 5.415148, -0.1055938, -4.1578026)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D2"]
+transform = Transform3D(0.18209827, 0.98328036, 0, -0.98328036, 0.18209827, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("BoxShape3D_rhw53")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D2"]
+transform = Transform3D(0.18223552, 0.9832549, 0, -0.9832549, 0.18223552, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("BoxMesh_kbpft")
+
+[node name="CamHolder" type="Node3D" parent="." node_paths=PackedStringArray("target")]
+script = ExtResource("2_4g64t")
+target = NodePath("../Car/MeshInstance3D")
+
+[node name="Camera3D" type="Camera3D" parent="CamHolder"]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -2.3588781, 1.3245364, 0)
